@@ -2,13 +2,19 @@ import type { Metadata } from "next";
 
 import "./globals.css";
 import localFont from "next/font/local";
-import {ThemeProvider} from "next-themes";
-import Navbar from "@/components/navigation/navbar";
+import ThemeProvider from "@/context/theme-provider";
+import NavBar from "@/components/navigation/navbar";
 
 const inter = localFont({
     src: './fonts/InterVR.ttf',
   variable: "--font-inter",
   weight: "100 200 300 400 500 600 700 800 900",
+});
+
+const spaceGrotesk = localFont({
+    src: "./fonts/SpaceGroteskVF.ttf",
+    variable: "--font-space-grotesk",
+    weight: "300 400 500 700",
 });
 
 
@@ -28,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} antialiased`}
+          className={`${inter.className} ${spaceGrotesk.variable} antialiased`}
       >
         <ThemeProvider
             attribute="class"
@@ -36,7 +42,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
             >
-            <Navbar/>
+            <NavBar/>
             {children}
         </ThemeProvider>
       </body>

@@ -3,9 +3,9 @@ import React from 'react'
 
 const Home = () => {
     return (
-        <div className="card">
-        Welcome to the the Ultimate Next JS course &#128075;
-        </div>
+        <>
+            <h1 className="h1-bold">Welcome to the world of Next.js</h1>
+        </>
     )
 }
 export default Home
