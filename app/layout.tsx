@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
 import ThemeProvider from "@/context/theme-provider";
-import NavBar from "@/components/navigation/navbar";
 
 const inter = localFont({
     src: './fonts/InterVR.ttf',
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
   title: "Kat Overflow App",
   description: "Stackoverflow like app built with Next.js",
     icons: {
-      icon: "/favicon.ico",
+      icon: "/site-logo.svg",
     }
 };
 
@@ -42,7 +41,6 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
             >
-            <NavBar/>
             {children}
         </ThemeProvider>
       </body>

@@ -43,8 +43,8 @@
     --shadow-dark-100: 0px 2px 10px 0px rgba(46, 52, 56, 0.1);
     --shadow-dark-200: 2px 0px 20px 0px rgba(39, 36, 36, 0.04);
 
-    /*--background-image-auth-dark: url("/images/auth-dark.png");*/
-    /*--background-image-auth-light: url("/images/auth-light.png");*/
+    --background-image-auth-dark: url("/images/auth-dark.png");
+    --background-image-auth-light: url("/images/auth-light.png");
 
     --breakpoint-xs: 420px;
 
@@ -118,6 +118,9 @@
 @utility background-dark400_light900 {
     @apply dark:bg-dark-400! bg-light-900!;
 }
+
+@utility bg-auth-light { background-image: var(--background-image-auth-light); }
+@utility bg-auth-dark  { background-image: var(--background-image-auth-dark); }
 
 @utility text-dark100_light900 {
     @apply text-dark-100! dark:text-light-900!;
