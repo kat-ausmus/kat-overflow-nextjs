@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from "next/image";
-import SocialAuthForm from "@/components/forms/socialAuthForm";
+import SocialAuthForm from "@/components/forms/SocialAuthForm";
 
 
 export default function AuthLayout({
