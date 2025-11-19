@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
 import ThemeProvider from "@/context/theme-provider";
+import {Toaster} from "sonner";
 
 const inter = localFont({
     src: './fonts/InterVR.ttf',
@@ -44,6 +45,7 @@ export default function RootLayout({
             {children}
         </ThemeProvider>
       </body>
+    <Toaster />
     </html>
   );
 }
