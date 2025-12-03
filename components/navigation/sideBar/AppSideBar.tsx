@@ -31,7 +31,7 @@ export function AppSidebar() {
             {firstSixLinks.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
-                  <AppSideBarItem item={item} isMobile />
+                  <AppSideBarItem item={item} />
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
@@ -42,7 +42,7 @@ export function AppSidebar() {
           <div className="flex flex-col justify-end-safe">
             {lastFewLinks.map((item) => (
               <div className="flex flex-col justify-end-safe gap-4 px-4 py-2" key={item.title}>
-                <AppSideBarBottomItem item={item} isMobile />
+                <AppSideBarBottomItem item={item} />
               </div>
             ))}
           </div>

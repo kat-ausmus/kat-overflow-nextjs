@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { SignOut } from "@/components/auth/SignOut";
 import { useSession } from "next-auth/react";
 
-const AppSideBarBottomItem = ({ item }: { item: SidebarLink; isMobile: boolean }) => {
+const AppSideBarBottomItem = ({ item }: { item: SidebarLink }) => {
   const { data: session } = useSession();
   const signInItemCss = "small-medium btn-secondary min-h-[41px] w-full rounded-lg px-4 py-3 shadow-none";
   const otherCss =
