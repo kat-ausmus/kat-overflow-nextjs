@@ -21,9 +21,9 @@ export function LeftSideBar() {
   const firstSixLinks = sidebarLinks.slice(0, 6);
   const lastFewLinks = sidebarLinks.slice(6);
   const isLoggedIn = !!session;
-  console.log("Rendering LeftSideBar", { session, isLoggedIn });
+  console.log("Rendering LeftSideBar", { session, isLoggedIn, firstSixLinks });
   return (
-    <Sidebar>
+    <Sidebar className="top-20">
       <SidebarHeader />
       <SidebarContent className="flex flex-col justify-between">
         <SidebarGroup>

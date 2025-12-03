@@ -2,20 +2,25 @@ import React from "react";
 import NavBar from "@/components/navigation/navbar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { LeftSideBar } from "@/components/navigation/sideBar/LeftSideBar";
+import { cookies } from "next/headers";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
+
   return (
-    <main>
-      <NavBar />
-      <SidebarProvider>
+    <div className="background-light800_dark200 relative flex flex-row">
+      <SidebarProvider defaultOpen={defaultOpen}>
+        <NavBar />
         <LeftSideBar />
-        <main>{children}</main>
-        {children}
+        <main className="left-40 flex flex-1 flex-col pt-25 pb-6 max-md:pb-14 sm:px-14">
+          <div className="mx-auto max-w-4xl">{children}</div>
+        </main>
       </SidebarProvider>
-    </main>
+    </div>
   );
 }
