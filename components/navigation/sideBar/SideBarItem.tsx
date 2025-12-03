@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
-const AppSideBarItem = ({ item }: { item: SidebarLink }) => {
+const SideBarItem = ({ item }: { item: SidebarLink }) => {
   const pathname = usePathname();
 
   const isActive = (pathname.includes(item.route) && item.route.length > 1) || pathname === item.route;
@@ -24,4 +24,4 @@ const AppSideBarItem = ({ item }: { item: SidebarLink }) => {
     </Link>
   );
 };
-export default AppSideBarItem;
+export default SideBarItem;

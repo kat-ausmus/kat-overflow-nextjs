@@ -12,16 +12,16 @@ import {
 } from "@/components/ui/sidebar";
 import { sidebarLinks } from "@/constants/sidebarLinks";
 import React from "react";
-import AppSideBarItem from "@/components/navigation/sideBar/AppSideBarItem";
-import AppSideBarBottomItem from "@/components/navigation/sideBar/AppSideBarBottomItem";
+import SideBarItem from "@/components/navigation/sideBar/SideBarItem";
+import SideBarBottomItem from "@/components/navigation/sideBar/SideBarBottomItem";
 import { useSession } from "next-auth/react";
 
-export function AppSidebar() {
+export function LeftSideBar() {
   const { data: session } = useSession();
   const firstSixLinks = sidebarLinks.slice(0, 6);
   const lastFewLinks = sidebarLinks.slice(6);
   const isLoggedIn = !!session;
-  console.log("Rendering AppSidebar", { session, isLoggedIn });
+  console.log("Rendering LeftSideBar", { session, isLoggedIn });
   return (
     <Sidebar>
       <SidebarHeader />
@@ -31,7 +31,7 @@ export function AppSidebar() {
             {firstSixLinks.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
-                  <AppSideBarItem item={item} />
+                  <SideBarItem item={item} />
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
@@ -42,7 +42,7 @@ export function AppSidebar() {
           <div className="flex flex-col justify-end-safe">
             {lastFewLinks.map((item) => (
               <div className="flex flex-col justify-end-safe gap-4 px-4 py-2" key={item.title}>
-                <AppSideBarBottomItem item={item} />
+                <SideBarBottomItem item={item} />
               </div>
             ))}
           </div>

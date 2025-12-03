@@ -1,7 +1,7 @@
 import React from "react";
 import NavBar from "@/components/navigation/navbar";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/navigation/sideBar/AppSideBar";
+import { LeftSideBar } from "@/components/navigation/sideBar/LeftSideBar";
 
 export default function RootLayout({
   children,
@@ -12,7 +12,7 @@ export default function RootLayout({
     <main>
       <NavBar />
       <SidebarProvider>
-        <AppSidebar />
+        <LeftSideBar />
         <main>{children}</main>
         {children}
       </SidebarProvider>
