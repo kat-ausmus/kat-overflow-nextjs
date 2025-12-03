@@ -6,8 +6,6 @@ import ThemeProvider from "@/context/theme-provider";
 import { Toaster } from "sonner";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/navigation/sideBar/AppSideBar";
 
 const inter = localFont({
   src: "./fonts/InterVR.ttf",
@@ -40,10 +38,7 @@ const Layout = async ({
       <SessionProvider session={session}>
         <body className={`${inter.className} ${spaceGrotesk.variable} antialiased`}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <SidebarProvider>
-              <AppSidebar />
-              <main>{children}</main>
-            </SidebarProvider>
+            <main>{children}</main>
           </ThemeProvider>
           <Toaster />
         </body>

@@ -5,8 +5,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -15,27 +13,40 @@ import {
 import { sidebarLinks } from "@/constants/sidebarLinks";
 import React from "react";
 import AppSideBarItem from "@/components/navigation/sideBar/AppSideBarItem";
-import AppSideBarBottom from "@/components/navigation/sideBar/AppSideBarBottom";
+import AppSideBarBottomItem from "@/components/navigation/sideBar/AppSideBarBottomItem";
+import { useSession } from "next-auth/react";
 
 export function AppSidebar() {
+  const { data: session } = useSession();
+  const firstSixLinks = sidebarLinks.slice(0, 6);
+  const lastFewLinks = sidebarLinks.slice(6);
+  const isLoggedIn = !!session;
+  console.log("Rendering AppSidebar", { session, isLoggedIn });
   return (
     <Sidebar>
       <SidebarHeader />
-      <SidebarContent>
-        <SidebarGroup />
-        <SidebarGroupLabel>Application</SidebarGroupLabel>
-        <SidebarGroupContent>
-          <SidebarMenu>
-            {sidebarLinks.map((item, index) => (
+      <SidebarContent className="flex flex-col justify-between">
+        <SidebarGroup>
+          <SidebarMenu className="align-items-stretch flex flex-col justify-end-safe gap-4">
+            {firstSixLinks.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
-                  {index <= 5 ? <AppSideBarItem item={item} isMobile /> : <AppSideBarBottom item={item} isMobile />}
+                  <AppSideBarItem item={item} isMobile />
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
-        </SidebarGroupContent>
-        <SidebarGroup />
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <div className="flex flex-col justify-end-safe">
+            {lastFewLinks.map((item) => (
+              <div className="flex flex-col justify-end-safe gap-4 px-4 py-2" key={item.title}>
+                <AppSideBarBottomItem item={item} isMobile />
+              </div>
+            ))}
+          </div>
+        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter />
     </Sidebar>

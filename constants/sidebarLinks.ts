@@ -51,15 +51,21 @@ export const sidebarLinks: SidebarLink[] = [
     title: "Ask a question page",
   },
   {
-    imgURL: "",
+    imgURL: "/icons/account.svg",
     route: ROUTES.SIGN_IN,
     label: "Sign In",
     title: "Sign In page",
   },
   {
-    imgURL: "",
+    imgURL: "/icons/sign-up.svg",
     route: ROUTES.SIGN_UP,
     label: "Sign Up",
     title: "Sign Up page",
+  },
+  {
+    imgURL: "",
+    route: "/sign-out",
+    label: "Log Out",
+    title: "Sign Out page",
   },
 ];

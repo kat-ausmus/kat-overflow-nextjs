@@ -20,7 +20,7 @@ const AppSideBarItem = ({ item, isMobile }: { item: SidebarLink; isMobile: boole
       )}
     >
       <Image src={item.imgURL} alt={item.label} width={20} height={20} className={cn({ "invert-colors": !isActive })} />
-      <p className={cn(isActive ? "base-bold" : "base-medium", !isMobile && "max-lg:hidden")}>{item.label}</p>
+      <p className={cn(isActive ? "base-bold" : "base-medium", !isMobile && "max-md:hidden")}>{item.label}</p>
     </Link>
   );
 };
