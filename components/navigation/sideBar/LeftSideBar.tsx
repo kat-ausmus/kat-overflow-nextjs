@@ -22,7 +22,7 @@ export function LeftSideBar() {
   return (
     <Sidebar className="pt-20">
       <SidebarHeader />
-      <SidebarContent className="flex flex-1 flex-col justify-between">
+      <SidebarContent className="flex flex-col justify-between">
         <SidebarGroup>
           <SidebarMenu className="align-items-stretch flex flex-col justify-end-safe gap-2">
             {firstSixLinks.map((item) => (
