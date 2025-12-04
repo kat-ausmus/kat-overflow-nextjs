@@ -38,12 +38,6 @@ export const sidebarLinks: SidebarLink[] = [
     label: "Tags",
     title: "Tags page",
   },
-  // {
-  //   imgURL: "/icons/user.svg",
-  //   route: "/profile",
-  //   label: "Profile",
-  //   title: "Profile page",
-  // },
   {
     imgURL: "/icons/question.svg",
     route: "/ask-a-question",
@@ -63,7 +57,7 @@ export const sidebarLinks: SidebarLink[] = [
     title: "Sign Up page",
   },
   {
-    imgURL: "",
+    imgURL: "/icons/sign-up.svg",
     route: "/sign-out",
     label: "Log Out",
     title: "Sign Out page",

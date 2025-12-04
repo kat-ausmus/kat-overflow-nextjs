@@ -3,6 +3,7 @@ import NavBar from "@/components/navigation/navbar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { LeftSideBar } from "@/components/navigation/sideBar/LeftSideBar";
 import { cookies } from "next/headers";
+import RightSideBar from "@/components/navigation/sideBar/RightSideBar";
 
 export default async function RootLayout({
   children,
@@ -20,6 +21,7 @@ export default async function RootLayout({
         <main className="left-40 flex flex-1 flex-col pt-25 pb-6 max-md:pb-14 sm:px-14">
           <div className="mx-auto max-w-4xl">{children}</div>
         </main>
+        <RightSideBar />
       </SidebarProvider>
     </div>
   );

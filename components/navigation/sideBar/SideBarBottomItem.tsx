@@ -24,8 +24,7 @@ const SideBarBottomItem = ({ item }: { item: SidebarLink }) => {
     </Link>
   );
 
-  const itemSignOut = <SignOut />;
-  const showSignOut = isSignedIn && isItemSignOut && itemSignOut;
+  const showSignOut = isSignedIn && isItemSignOut && <SignOut />;
   const showItemWithButton = !isSignedIn && !isItemSignOut && itemWithButton;
 
   return showSignOut || showItemWithButton || <></>;

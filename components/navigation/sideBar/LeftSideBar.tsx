@@ -14,20 +14,17 @@ import { sidebarLinks } from "@/constants/sidebarLinks";
 import React from "react";
 import SideBarItem from "@/components/navigation/sideBar/SideBarItem";
 import SideBarBottomItem from "@/components/navigation/sideBar/SideBarBottomItem";
-import { useSession } from "next-auth/react";
 
 export function LeftSideBar() {
-  const { data: session } = useSession();
   const firstSixLinks = sidebarLinks.slice(0, 6);
   const lastFewLinks = sidebarLinks.slice(6);
-  const isLoggedIn = !!session;
-  console.log("Rendering LeftSideBar", { session, isLoggedIn, firstSixLinks });
+
   return (
-    <Sidebar className="top-20">
+    <Sidebar className="pt-20">
       <SidebarHeader />
-      <SidebarContent className="flex flex-col justify-between">
+      <SidebarContent className="flex flex-1 flex-col justify-between">
         <SidebarGroup>
-          <SidebarMenu className="align-items-stretch flex flex-col justify-end-safe gap-4">
+          <SidebarMenu className="align-items-stretch flex flex-col justify-end-safe gap-2">
             {firstSixLinks.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
@@ -39,9 +36,9 @@ export function LeftSideBar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <div className="flex flex-col justify-end-safe">
+          <div className="flex flex-col">
             {lastFewLinks.map((item) => (
-              <div className="flex flex-col justify-end-safe gap-4 px-4 py-2" key={item.title}>
+              <div className="flex flex-col pt-4" key={item.title}>
                 <SideBarBottomItem item={item} />
               </div>
             ))}
