@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   },
 };
 
-const Layout = async ({
+const MainLayout = async ({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -55,4 +55,4 @@ const Layout = async ({
   );
 };
 
-export default Layout;
+export default MainLayout;

@@ -18,7 +18,7 @@ import SideBarBottomItem from "@/components/navigation/sideBar/SideBarBottomItem
 export function LeftSideBar() {
   const firstSixLinks = sidebarLinks.slice(0, 6);
   const lastFewLinks = sidebarLinks.slice(6);
-
+  console.log("showing left side bar");
   return (
     <Sidebar className="pt-20">
       <SidebarHeader />
