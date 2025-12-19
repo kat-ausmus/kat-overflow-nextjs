@@ -4,8 +4,11 @@ import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
 import HomeFilter from "@/components/filters/page";
+import QuestionCard from "@/components/cards/QuestionCard";
 
-const questions = [
+const last5Minutes = new Date(new Date().getTime() - 5 * 60 * 1000);
+
+const questions: Question[] = [
   {
     _id: "1",
     title: "How to learn React?",
@@ -18,7 +21,7 @@ const questions = [
     upvotes: 10,
     answers: 5,
     views: 100,
-    createdAt: new Date(),
+    createdAt: last5Minutes,
   },
   {
     _id: "2",
@@ -70,7 +73,7 @@ const Home = async ({ searchParams }: SearchParams) => {
       <HomeFilter />
       <div className="mt-10 flex w-full flex-col gap-6">
         {filteredQuestions.map((question) => (
-          <h1 key={question._id}>{question.title}</h1>
+          <QuestionCard key={question._id} question={question} />
         ))}
       </div>
     </>
