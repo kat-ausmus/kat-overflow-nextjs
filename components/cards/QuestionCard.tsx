@@ -34,7 +34,7 @@ const QuestionCard = ({ question: { _id, title, tags, author, createdAt, upvotes
 
       <div className="flex-between mt-6 w-full flex-wrap gap-3">
         <Metric
-          imgUrl={author.image}
+          imgUrl={author.image || "/icons/avatar.svg"}
           alt={author.name}
           value={author.name}
           title={`• asked ${getTimeStamp(createdAt)}`}
