@@ -1,9 +1,10 @@
-import { model, models, Schema, Types } from 'mongoose';
+import { Document, model, models, Schema, Types } from 'mongoose';
 
 export const VoteTarget = ['question', 'answer'] as const;
 export type VoteTargetType = (typeof VoteTarget)[number];
 
 export type VoteType = 'upvote' | 'downvote';
+
 export interface IVote {
   voter: Types.ObjectId;
   targetId: Types.ObjectId;
@@ -11,6 +12,8 @@ export interface IVote {
   type: VoteType;
   votedAt: Date;
 }
+
+export interface IVoteDocument extends IVote, Document {}
 
 const VoteSchema = new Schema<IVote>(
   {

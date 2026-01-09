@@ -1,4 +1,4 @@
-import { model, models, Schema, Types } from 'mongoose';
+import { Document, model, models, Schema, Types } from 'mongoose';
 import { VoteTarget } from '@/database/vote.model';
 
 export const Action = ['upvote', 'downvote', 'view', 'new-question'] as const;
@@ -10,6 +10,8 @@ export interface IInteraction {
   actionId: Types.ObjectId;
   actionAppliedTo: String;
 }
+
+export interface IInteractionDocument extends IInteraction, Document {}
 
 const InteractionSchema = new Schema<IInteraction>(
   {
