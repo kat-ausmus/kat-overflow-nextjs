@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   title: 'Kat Overflow App',
   description: 'Stackoverflow like app built with Next.js',
   icons: {
-    icon: '/site-logo.svg',
+    icon: '/images/site-logo.svg',
   },
 };
 

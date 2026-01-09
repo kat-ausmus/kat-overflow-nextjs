@@ -16,7 +16,7 @@ const AuthLayout = async ({
             <h1 className="h2-bold text-dark100_light900">Join Kat OverFlow</h1>
             <p className="paragraph-regular text-dark500_light400">To get your questions answered</p>
           </div>
-          <Image src="images/site-logo.svg" alt="KatFlow Logo" width={50} height={50} className="object-contain" />
+          <Image src="/images/site-logo.svg" alt="KatFlow Logo" width={50} height={50} className="object-contain" />
         </div>
 
         {children}
