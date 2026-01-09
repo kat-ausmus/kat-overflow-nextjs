@@ -1,8 +1,8 @@
 import { model, models, Schema, Types } from 'mongoose';
 
-const VoteTarget = ['question', 'answer'] as const;
-
+export const VoteTarget = ['question', 'answer'] as const;
 export type VoteTargetType = (typeof VoteTarget)[number];
+
 export type VoteType = 'upvote' | 'downvote';
 export interface IVote {
   voter: Types.ObjectId;
