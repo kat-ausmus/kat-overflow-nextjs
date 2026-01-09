@@ -1,37 +1,37 @@
-import Link from "next/link";
+import Link from 'next/link';
 
-import LocalSearch from "@/components/search/LocalSearch";
-import { Button } from "@/components/ui/button";
-import ROUTES from "@/constants/routes";
-import HomeFilter from "@/components/filters/page";
-import QuestionCard from "@/components/cards/QuestionCard";
+import LocalSearch from '@/components/search/LocalSearch';
+import { Button } from '@/components/ui/button';
+import ROUTES from '@/constants/routes';
+import HomeFilter from '@/components/filters/page';
+import QuestionCard from '@/components/cards/QuestionCard';
 
 const last5Minutes = new Date(new Date().getTime() - 5 * 60 * 1000);
 
 const questions: Question[] = [
   {
-    _id: "1",
-    title: "How to learn React?",
-    description: "I want to learn React, can anyone help me?",
+    _id: '1',
+    title: 'How to learn React?',
+    description: 'I want to learn React, can anyone help me?',
     tags: [
-      { _id: "1", name: "React" },
-      { _id: "2", name: "JavaScript" },
+      { _id: '1', name: 'React' },
+      { _id: '2', name: 'JavaScript' },
     ],
-    author: { _id: "1", name: "John Doe" },
+    author: { _id: '1', name: 'John Doe' },
     upvotes: 10,
     answers: 5,
     views: 100,
     createdAt: last5Minutes,
   },
   {
-    _id: "2",
-    title: "How to learn JavaScript?",
-    description: "I want to learn JavaScript, can anyone help me?",
+    _id: '2',
+    title: 'How to learn JavaScript?',
+    description: 'I want to learn JavaScript, can anyone help me?',
     tags: [
-      { _id: "1", name: "Javascript" },
-      { _id: "2", name: "JavaScript" },
+      { _id: '1', name: 'Javascript' },
+      { _id: '2', name: 'JavaScript' },
     ],
-    author: { _id: "1", name: "John Doe" },
+    author: { _id: '1', name: 'John Doe' },
     upvotes: 10,
     answers: 5,
     views: 100,
@@ -44,7 +44,7 @@ interface SearchParams {
 }
 
 const Home = async ({ searchParams }: SearchParams) => {
-  const { query = "", filter = "" } = await searchParams;
+  const { query = '', filter = '' } = await searchParams;
 
   const filteredQuestions = questions.filter((question) => {
     const matchesQuery = question.title.toLowerCase().includes(query.toLowerCase());
@@ -67,7 +67,7 @@ const Home = async ({ searchParams }: SearchParams) => {
           imgSrc="/icons/search.svg"
           placeholder="Search questions..."
           otherClasses="flex-1"
-          iconPosition={"left"}
+          iconPosition={'left'}
         />
       </section>
       <HomeFilter />

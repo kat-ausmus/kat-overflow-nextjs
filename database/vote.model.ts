@@ -1,9 +1,9 @@
-import { model, models, Schema, Types } from "mongoose";
+import { model, models, Schema, Types } from 'mongoose';
 
-const VoteTarget = ["question", "answer"] as const;
+const VoteTarget = ['question', 'answer'] as const;
 
 export type VoteTargetType = (typeof VoteTarget)[number];
-export type VoteType = "upvote" | "downvote";
+export type VoteType = 'upvote' | 'downvote';
 export interface IVote {
   voter: Types.ObjectId;
   targetId: Types.ObjectId;
@@ -23,6 +23,6 @@ const VoteSchema = new Schema<IVote>(
   { timestamps: true }
 );
 
-const Vote = models?.Vote || model<IVote>("Vote", VoteSchema);
+const Vote = models?.Vote || model<IVote>('Vote', VoteSchema);
 
 export default Vote;

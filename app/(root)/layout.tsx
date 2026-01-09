@@ -1,8 +1,8 @@
-import React from "react";
-import NavBar from "@/components/navigation/navbar";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { LeftSideBar } from "@/components/navigation/sideBar/LeftSideBar";
-import RightSideBar from "@/components/navigation/sideBar/RightSideBar";
+import React from 'react';
+import NavBar from '@/components/navigation/navbar';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { LeftSideBar } from '@/components/navigation/sideBar/LeftSideBar';
+import RightSideBar from '@/components/navigation/sideBar/RightSideBar';
 
 const RootLayout = async ({
   children,
