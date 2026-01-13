@@ -39,11 +39,25 @@ const questions: Question[] = [
   },
 ];
 
+// const errtest = async () => {
+//   const sampleValidationErrorObj = {
+//     title: ['Required'],
+//     tags: ['"JavaScript" is not a valid tag.'],
+//   } as ErrorRecordType;
+//   try {
+//     throw new ValidationError(sampleValidationErrorObj);
+//   } catch (error) {
+//     return handleError(error);
+//   }
+// };
+
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 
 const Home = async ({ searchParams }: SearchParams) => {
+  // const test2 = await test();
+  // console.log('test2', test2);
   const { query = '', filter = '' } = await searchParams;
 
   const filteredQuestions = questions.filter((question) => {
