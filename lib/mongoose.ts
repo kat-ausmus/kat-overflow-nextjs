@@ -2,12 +2,14 @@ import mongoose, { Mongoose } from 'mongoose';
 
 import logger from './logger';
 
-const MONGODB_URI = process.env.MONGODB_URI as string;
+let MONGODB_URI = process.env.MONGODB_URI as string;
 
 if (!MONGODB_URI) {
-  throw new Error('MONGODB_URI is not defined');
+  logger.info('Mongo DB URI not found. Connecting to local mongoDB');
+  MONGODB_URI = 'mongodb://localhost:27017';
 }
 
+const DB_NAME = process.env.MONGODB_DBNAME || 'kat_overflow';
 interface MongooseCache {
   conn: Mongoose | null;
   promise: Promise<Mongoose> | null;
@@ -33,7 +35,7 @@ const dbConnect = async (): Promise<Mongoose> => {
   if (!cached.promise) {
     cached.promise = mongoose
       .connect(MONGODB_URI, {
-        dbName: 'devflow',
+        dbName: DB_NAME,
       })
       .then((result) => {
         logger.info('Connected to MongoDB');

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { z, ZodError } from 'zod';
+import { ZodError } from 'zod';
 import { RequestError, ValidationError } from '../http-errors';
 import { ErrorRecordType } from '@/lib/error-types';
 import logger from '@/lib/logger';
@@ -30,9 +30,9 @@ const handleError = (error: unknown, responseType: ResponseType = 'server') => {
   }
 
   if (error instanceof ZodError) {
-    const validationError = new ValidationError(z.treeifyError(error) as ErrorRecordType);
+    const validationError = new ValidationError(error);
 
-    logger.error({ err: error }, `Validation Error: ${validationError.message}`);
+    logger.error(`Validation Error: ${JSON.stringify(validationError.errors)}`);
 
     return formatResponse(responseType, validationError.statusCode, validationError.message, validationError.errors);
   }

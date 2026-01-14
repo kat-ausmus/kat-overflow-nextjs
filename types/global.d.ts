@@ -1,3 +1,6 @@
+import { ErrorRecordType } from '@/lib/error-types';
+import { NextResponse } from 'next/server';
+
 interface Tag {
   _id: string;
   name: string;
@@ -20,3 +23,19 @@ interface Question {
   answers: number;
   views: number;
 }
+
+type ActionResponse<T = null> = {
+  success: boolean;
+  data?: T;
+  error?: {
+    message: string;
+    details?: ErrorRecordType;
+    statusCode?: number;
+  };
+};
+
+type SuccessResponse<T = null> = ActionResponse<T> & { success: true };
+type ErrorResponse<T> = ActionResponse<T> & { success: false };
+
+type APIErrorResponse = NextResponse<ErrorResponse>;
+type APIResponse<T = null> = NextResponse<SuccessResponse<T> | ErrorResponse<T>>;

@@ -1,5 +1,5 @@
-import { Document, model, Schema } from "mongoose";
-import bcrypt from "bcrypt";
+import { Document, model, models, Schema } from 'mongoose';
+import bcrypt from 'bcrypt';
 
 export interface IAccount {
   userId: Schema.Types.ObjectId;
@@ -17,7 +17,7 @@ export interface IAccountDocument extends IAccount, Document {
 
 const AccountSchema = new Schema<IAccountDocument>(
   {
-    userId: { type: Schema.Types.ObjectId, ref: "User" },
+    userId: { type: Schema.Types.ObjectId, ref: 'User' },
     name: { type: String, required: true },
     password: { type: String },
     image: { type: String },
@@ -29,9 +29,9 @@ const AccountSchema = new Schema<IAccountDocument>(
 
 // The Middleware
 // 'IAccount & Document' means: "The data in my interface PLUS Mongoose methods"
-AccountSchema.pre("save", async function (this: IAccount & Document) {
+AccountSchema.pre('save', async function (this: IAccount & Document) {
   // Only hash the password if it has been modified (or is new)
-  if (this.password && this.isModified("password")) {
+  if (this.password && this.isModified('password')) {
     try {
       // Generate a salt with a cost factor (e.g., 10)
       const salt = await bcrypt.genSalt(10);
@@ -45,9 +45,9 @@ AccountSchema.pre("save", async function (this: IAccount & Document) {
 
 // The custom method
 AccountSchema.methods.comparePassword = async function (this: IAccountDocument, candidate: string): Promise<boolean> {
-  return bcrypt.compare(candidate, this.password || "");
+  return bcrypt.compare(candidate, this.password || '');
 };
 
-const Account = model<IAccountDocument>("Account", AccountSchema);
+const Account = models?.Account || model<IAccountDocument>('Account', AccountSchema);
 
 export default Account;

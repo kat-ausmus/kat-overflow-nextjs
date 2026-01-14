@@ -1,4 +1,5 @@
 import { ErrorRecordType } from '@/lib/error-types';
+import { ZodError } from 'zod';
 
 interface ErrorParams {
   statusCode: number;
@@ -20,21 +21,26 @@ export class RequestError extends Error {
 // 400++
 
 export class ValidationError extends RequestError {
-  constructor(errors: ErrorRecordType) {
-    const formattedMsg = ValidationError.formatFieldErrors(errors);
-    super({ statusCode: 400, message: formattedMsg, errors });
+  constructor(errors: ZodError) {
+    const formattedErrors = ValidationError.formatFieldErrors(errors);
+    super({
+      statusCode: 400,
+      message: 'Validation Error',
+      errors: formattedErrors,
+    });
   }
 
-  static formatFieldErrors(errors: ErrorRecordType) {
-    console.log('inside formatFieldErrors!', errors);
-    const formattedMessages = Object.entries(errors).map(([field, messages]) => {
-      const fieldName = field.charAt(0).toUpperCase() + field.slice(1);
-      if (messages[0].toLowerCase() === 'required') return `${fieldName} is required`;
-      else {
-        return messages.join(' and ');
+  static formatFieldErrors(errors: ZodError): ErrorRecordType {
+    const fieldErrors: ErrorRecordType = {};
+    errors.issues.forEach((issue) => {
+      const path = issue.path.join('.');
+      if (!fieldErrors[path]) {
+        fieldErrors[path] = [];
       }
+      fieldErrors[path].push(issue.message);
     });
-    return formattedMessages.join('; ');
+
+    return fieldErrors;
   }
 }
 

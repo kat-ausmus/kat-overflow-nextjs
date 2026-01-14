@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import ROUTES from '@/constants/routes';
 import HomeFilter from '@/components/filters/page';
 import QuestionCard from '@/components/cards/QuestionCard';
+import { Question } from '@/types/global';
 
 const last5Minutes = new Date(new Date().getTime() - 5 * 60 * 1000);
 

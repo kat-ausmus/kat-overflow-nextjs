@@ -1,11 +1,12 @@
-import Link from "next/link";
-import React from "react";
+import Link from 'next/link';
+import React from 'react';
 
-import ROUTES from "@/constants/routes";
-import { getTimeStamp } from "@/lib/utils";
+import ROUTES from '@/constants/routes';
+import { getTimeStamp } from '@/lib/utils';
 
-import TagCard from "./TagCard";
-import Metric from "../Metric";
+import TagCard from './TagCard';
+import Metric from '../Metric';
+import { Question, Tag } from '@/types/global';
 
 interface Props {
   question: Question;
@@ -34,7 +35,7 @@ const QuestionCard = ({ question: { _id, title, tags, author, createdAt, upvotes
 
       <div className="flex-between mt-6 w-full flex-wrap gap-3">
         <Metric
-          imgUrl={author.image || "/icons/avatar.svg"}
+          imgUrl={author.image || '/icons/avatar.svg'}
           alt={author.name}
           value={author.name}
           title={`• asked ${getTimeStamp(createdAt)}`}
