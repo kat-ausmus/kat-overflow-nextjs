@@ -8,12 +8,12 @@ import { UserSchema } from '@/lib/validations';
 
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  if (!id) throw new NotFoundError('User not found');
+  if (!id) return handleError(new NotFoundError('User'), 'api');
 
   try {
     await dbConnect();
     const user = await User.findById(id);
-    if (!user) return handleError(new NotFoundError('User not found'), 'api');
+    if (!user) return handleError(new NotFoundError('User'), 'api');
     return NextResponse.json({ success: true, data: user }, { status: 200 });
   } catch (error) {
     return handleError(error, 'api') as APIErrorResponse;
@@ -22,12 +22,12 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
 
 export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  if (!id) return handleError(new NotFoundError('User not found'), 'api');
+  if (!id) return handleError(new NotFoundError('User'), 'api');
 
   try {
     await dbConnect();
     const user = await User.findByIdAndDelete(id);
-    if (!user) handleError(new NotFoundError('User not found'), 'api');
+    if (!user) handleError(new NotFoundError('User'), 'api');
     return NextResponse.json({ success: true, data: user }, { status: 200 });
   } catch (error) {
     return handleError(error, 'api') as APIErrorResponse;
@@ -36,14 +36,14 @@ export async function DELETE(_: Request, { params }: { params: Promise<{ id: str
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  if (!id) throw new NotFoundError('User not found');
+  if (!id) return handleError(new NotFoundError('User'), 'api');
   try {
     const body = await request.json();
     const validatedData = UserSchema.safeParse(body);
 
     await dbConnect();
     const updatedUser = await User.findByIdAndUpdate(id, validatedData, { new: true });
-    if (!updatedUser) handleError(new NotFoundError('User not found'), 'api');
+    if (!updatedUser) return handleError(new NotFoundError('User'), 'api');
     return NextResponse.json({ success: true, data: updatedUser }, { status: 200 });
   } catch (error) {
     return handleError(error, 'api') as APIErrorResponse;

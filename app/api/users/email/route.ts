@@ -1,19 +1,21 @@
 import handleError from '@/lib/handlers/error';
 import { APIErrorResponse } from '@/types/global';
 import { UserSchema } from '@/lib/validations';
-import { NotFoundError, ValidationError } from '@/lib/http-errors';
+import { NotFoundError } from '@/lib/http-errors';
 import User from '@/database/user.model';
 import { NextResponse } from 'next/server';
+import dbConnect from '@/lib/mongoose';
 
 export async function POST(request: Request) {
   const { email } = await request.json();
   try {
     const validatedEmail = UserSchema.partial().safeParse({ email });
     if (!validatedEmail.success) {
-      return new ValidationError(validatedEmail.error);
+      return handleError(validatedEmail.error, 'api');
     }
+    await dbConnect();
     const user = await User.findOne({ email });
-    if (!user) handleError(new NotFoundError('User not found'), 'api');
+    if (!user) return handleError(new NotFoundError('User'), 'api');
 
     return NextResponse.json(
       {
