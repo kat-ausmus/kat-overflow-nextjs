@@ -4,6 +4,7 @@ import User from '@/database/user.model';
 import { NextResponse } from 'next/server';
 import handleError from '@/lib/handlers/error';
 import { APIErrorResponse } from '@/types/global';
+import { UserSchema } from '@/lib/validations';
 
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -38,7 +39,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   if (!id) throw new NotFoundError('User not found');
   try {
     const body = await request.json();
-    const validatedData = User.schema.safeParse(body);
+    const validatedData = UserSchema.safeParse(body);
 
     await dbConnect();
     const updatedUser = await User.findByIdAndUpdate(id, validatedData, { new: true });
