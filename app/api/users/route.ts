@@ -3,7 +3,7 @@ import dbConnect from '@/lib/mongoose';
 import User from '@/database/user.model';
 import { NextResponse } from 'next/server';
 import { APIErrorResponse } from '@/types/global';
-import { UserSchema } from '@/lib/validations';
+import { UserSchema } from '@/lib/validations/user.schema';
 import logger from '@/lib/logger';
 
 export async function GET() {

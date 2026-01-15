@@ -1,6 +1,6 @@
 import handleError from '@/lib/handlers/error';
 import { APIErrorResponse } from '@/types/global';
-import { UserSchema } from '@/lib/validations';
+import { UserSchema } from '@/lib/validations/user.schema';
 import { NotFoundError, ValidationError } from '@/lib/http-errors';
 import User from '@/database/user.model';
 import { NextResponse } from 'next/server';

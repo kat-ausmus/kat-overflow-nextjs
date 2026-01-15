@@ -2,7 +2,7 @@
 
 import React from 'react';
 import AuthForm from '@/components/forms/AuthForm';
-import { SignInSchema } from '@/lib/validations';
+import { SignInSchema } from '@/lib/validations/auth.schema';
 
 const Page = () => {
   return (
