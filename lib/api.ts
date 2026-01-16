@@ -15,43 +15,43 @@ export const api = {
       }),
   },
   users: {
-    getAll: () => fetchHandler(`${API_BASE_URL}/users`),
-    getById: (id: string) => fetchHandler(`${API_BASE_URL}/users/${id}`),
+    getAll: () => fetchHandler(`${API_BASE_URL}/${ROUTES.USERS}`),
+    getById: (id: string) => fetchHandler(`${API_BASE_URL}/${ROUTES.USER_BY_ID(id)}`),
     getByEmail: (email: string) =>
-      fetchHandler(`${API_BASE_URL}/users/email`, {
+      fetchHandler(`${API_BASE_URL}/${ROUTES.USER_BY_EMAIL}`, {
         method: 'POST',
         body: JSON.stringify({ email }),
       }),
     create: (userData: Partial<IUser>) =>
-      fetchHandler(`${API_BASE_URL}/users`, {
+      fetchHandler(`${API_BASE_URL}/${ROUTES.USERS}`, {
         method: 'POST',
         body: JSON.stringify(userData),
       }),
     update: (id: string, userData: Partial<IUser>) =>
-      fetchHandler(`${API_BASE_URL}/users/${id}`, {
+      fetchHandler(`${API_BASE_URL}/${ROUTES.USER_BY_ID(id)}`, {
         method: 'PUT',
         body: JSON.stringify(userData),
       }),
-    delete: (id: string) => fetchHandler(`${API_BASE_URL}/users/${id}`, { method: 'DELETE' }),
+    delete: (id: string) => fetchHandler(`${API_BASE_URL}/${ROUTES.USER_BY_ID(id)}`, { method: 'DELETE' }),
   },
   accounts: {
-    getAll: () => fetchHandler(`${API_BASE_URL}/accounts`),
-    getById: (id: string) => fetchHandler(`${API_BASE_URL}/accounts/${id}`),
+    getAll: () => fetchHandler(`${API_BASE_URL}/${ROUTES.ACCOUNTS}`),
+    getById: (id: string) => fetchHandler(`${API_BASE_URL}/${ROUTES.ACCOUNT_BY_ID(id)}`),
     getByProvider: (providerAccountId: string) =>
-      fetchHandler(`${API_BASE_URL}/accounts/provider`, {
+      fetchHandler(`${API_BASE_URL}/${ROUTES.ACCOUNT_BY_PROVIDER(providerAccountId)}`, {
         method: 'POST',
         body: JSON.stringify({ providerAccountId }),
       }),
     create: (accountData: Partial<IAccount>) =>
-      fetchHandler(`${API_BASE_URL}/accounts`, {
+      fetchHandler(`${API_BASE_URL}/${ROUTES.ACCOUNTS}`, {
         method: 'POST',
         body: JSON.stringify(accountData),
       }),
     update: (id: string, accountData: Partial<IAccount>) =>
-      fetchHandler(`${API_BASE_URL}/accounts/${id}`, {
+      fetchHandler(`${API_BASE_URL}/${ROUTES.ACCOUNT_BY_ID(id)}`, {
         method: 'PUT',
         body: JSON.stringify(accountData),
       }),
-    delete: (id: string) => fetchHandler(`${API_BASE_URL}/accounts/${id}`, { method: 'DELETE' }),
+    delete: (id: string) => fetchHandler(`${API_BASE_URL}/${ROUTES.ACCOUNT_BY_ID(id)}`, { method: 'DELETE' }),
   },
 };

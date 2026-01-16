@@ -6,6 +6,7 @@ import ROUTES from '@/constants/routes';
 import HomeFilter from '@/components/filters/page';
 import QuestionCard from '@/components/cards/QuestionCard';
 import { Question } from '@/types/global';
+import { auth } from '@/auth';
 
 const last5Minutes = new Date(new Date().getTime() - 5 * 60 * 1000);
 
@@ -57,6 +58,9 @@ interface SearchParams {
 }
 
 const Home = async ({ searchParams }: SearchParams) => {
+  const session = await auth();
+
+  console.log('Session: ', session);
   // const test2 = await test();
   // console.log('test2', test2);
   const { query = '', filter = '' } = await searchParams;
