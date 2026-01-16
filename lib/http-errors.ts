@@ -49,32 +49,33 @@ export class NotFoundError extends RequestError {
     super({ statusCode: 404, message: resource + ' not found' });
   }
 }
-class UnauthorizedError extends RequestError {
+
+export class UnauthorizedError extends RequestError {
   constructor(message: string) {
     super({ statusCode: 401, message });
   }
 }
 
-class ForbiddenError extends RequestError {
+export class ForbiddenError extends RequestError {
   constructor(message: string) {
     super({ statusCode: 403, message });
   }
 }
 
-class TooManyRequestsError extends RequestError {
+export class TooManyRequestsError extends RequestError {
   constructor(message: string) {
     super({ statusCode: 429, message });
   }
 }
 
 // 500++
-class InternalServerError extends RequestError {
+export class InternalServerError extends RequestError {
   constructor(message: string) {
     super({ statusCode: 500, message });
   }
 }
 
-class ServiceUnavailableError extends RequestError {
+export class ServiceUnavailableError extends RequestError {
   constructor(message: string) {
     super({ statusCode: 503, message });
   }

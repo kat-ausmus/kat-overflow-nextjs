@@ -44,7 +44,6 @@ const QuestionForm = () => {
   };
 
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, field: { value: string[] }) => {
-    console.log('entry handleInputKeyDown', { field, e });
     if (e.key === 'Enter') {
       e.preventDefault();
       const tagInput = e.currentTarget.value.trim();

@@ -61,8 +61,7 @@ const Home = async ({ searchParams }: SearchParams) => {
   const session = await auth();
 
   console.log('Session: ', session);
-  // const test2 = await test();
-  // console.log('test2', test2);
+
   const { query = '', filter = '' } = await searchParams;
 
   const filteredQuestions = questions.filter((question) => {

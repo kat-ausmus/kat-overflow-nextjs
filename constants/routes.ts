@@ -12,7 +12,7 @@ const ROUTES = {
   USER_BY_EMAIL: `users/email`,
   ACCOUNTS: 'accounts',
   ACCOUNT_BY_ID: (id: string) => `accounts/${id}`,
-  ACCOUNT_BY_PROVIDER: (providerAccountId: string) => `accounts/${providerAccountId}`,
+  ACCOUNT_BY_PROVIDER: `accounts/provider`,
 };
 
 export default ROUTES;

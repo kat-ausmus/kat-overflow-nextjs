@@ -8,9 +8,12 @@ import handleError from '@/lib/handlers/error';
 import dbConnect from '@/lib/mongoose';
 import { SignInWithOAuthSchema } from '@/lib/validations';
 import { APIErrorResponse } from '@/types/global';
+import logger from '@/lib/logger';
 
 export async function POST(request: Request) {
-  const { provider, providerAccountId, user } = await request.json();
+  const { provider, providerAccountId, user, ...others } = await request.json();
+
+  logger.info({ others, provider, providerAccountId, user }, `Signing in with ${provider} account...`);
 
   await dbConnect();
 
@@ -24,7 +27,9 @@ export async function POST(request: Request) {
       user,
     });
 
-    if (!validatedData.success) return handleError(validatedData.error, 'api');
+    if (!validatedData.success) {
+      return handleError(validatedData.error, 'api');
+    }
 
     const { name, username, email, image } = user;
 
@@ -34,10 +39,14 @@ export async function POST(request: Request) {
       trim: true,
     });
 
+    const [firstName, lastName] = name.split(' ');
+
     let existingUser = await User.findOne({ email }).session(session);
 
     if (!existingUser) {
-      [existingUser] = await User.create([{ name, username: slugifiedUsername, email, image }], { session });
+      [existingUser] = await User.create([{ firstName, lastName, username: slugifiedUsername, email, image }], {
+        session,
+      });
     } else {
       const updatedData: { name?: string; image?: string } = {};
 
