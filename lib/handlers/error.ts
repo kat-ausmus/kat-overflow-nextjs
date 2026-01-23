@@ -17,10 +17,11 @@ const formatResponse = (
     error: {
       message,
       details: errors,
+      statusCode: status,
     },
   };
 
-  return responseType === 'api' ? NextResponse.json(responseContent, { status }) : { status, ...responseContent };
+  return responseType === 'api' ? NextResponse.json(responseContent, { status }) : responseContent;
 };
 
 const handleError = (error: unknown, responseType: ResponseType = 'server') => {
@@ -40,7 +41,7 @@ const handleError = (error: unknown, responseType: ResponseType = 'server') => {
   if (error instanceof Error) {
     logger.error(error.message);
 
-    return formatResponse(responseType, 500, error.message);
+    return formatResponse(responseType, 422, error.message);
   }
 
   logger.error({ err: error }, 'An unexpected error occurred...');

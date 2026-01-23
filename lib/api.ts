@@ -1,6 +1,7 @@
 import ROUTES from '@/constants/routes';
 import { IAccount } from '@/database/account.model';
 import { IUser } from '@/database/user.model';
+import { SignInWithOAuthParams } from '@/types/action';
 
 import { fetchHandler } from './handlers/fetch';
 
@@ -38,7 +39,7 @@ export const api = {
     getAll: () => fetchHandler(`${API_BASE_URL}/${ROUTES.ACCOUNTS}`),
     getById: (id: string) => fetchHandler(`${API_BASE_URL}/${ROUTES.ACCOUNT_BY_ID(id)}`),
     getByProvider: (providerAccountId: string) =>
-      fetchHandler(`${API_BASE_URL}/${ROUTES.ACCOUNT_BY_PROVIDER(providerAccountId)}`, {
+      fetchHandler(`${API_BASE_URL}/${ROUTES.ACCOUNT_BY_PROVIDER}`, {
         method: 'POST',
         body: JSON.stringify({ providerAccountId }),
       }),

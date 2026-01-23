@@ -1,4 +1,4 @@
-interface SignInWithOAuthParams {
+export interface SignInWithOAuthParams {
   provider: 'github' | 'google';
   providerAccountId: string;
   user: {
@@ -7,4 +7,11 @@ interface SignInWithOAuthParams {
     image: string;
     username: string;
   };
+}
+
+export interface AuthCredentials {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
 }

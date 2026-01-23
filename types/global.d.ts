@@ -1,18 +1,18 @@
 import { ErrorRecordType } from '@/lib/error-types';
 import { NextResponse } from 'next/server';
 
-interface Tag {
+export interface Tag {
   _id: string;
   name: string;
 }
 
-interface Author {
+export interface Author {
   _id: string;
   name: string;
   image?: string;
 }
 
-interface Question {
+export interface Question {
   _id: string;
   title: string;
   description: string;
@@ -24,7 +24,7 @@ interface Question {
   views: number;
 }
 
-type ActionResponse<T = null> = {
+export type ActionResponse<T = null> = {
   success: boolean;
   data?: T;
   error?: {
@@ -32,10 +32,11 @@ type ActionResponse<T = null> = {
     details?: ErrorRecordType;
     statusCode?: number;
   };
+  status?: number;
 };
 
-type SuccessResponse<T = null> = ActionResponse<T> & { success: true };
-type ErrorResponse<T> = ActionResponse<T> & { success: false };
+export type SuccessResponse<T = null> = ActionResponse<T> & { success: true };
+export type ErrorResponse<T> = ActionResponse<T> & { success: false };
 
-type APIErrorResponse = NextResponse<ErrorResponse<T>>;
-type APIResponse<T = null> = NextResponse<SuccessResponse<T> | ErrorResponse<T>>;
+export type APIErrorResponse = NextResponse<ErrorResponse<any>>;
+export type APIResponse<T = null> = NextResponse<SuccessResponse<T> | ErrorResponse<T>>;
