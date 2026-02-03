@@ -12,7 +12,7 @@ export interface IAccount {
 
 // The Document (Data + Methods)
 export interface IAccountDocument extends IAccount, Document {
-  comparePassword(candidate: string): Promise<boolean>;
+  comparePassword(incomingPassword: string): Promise<boolean>;
 }
 
 const AccountSchema = new Schema<IAccountDocument>(
@@ -44,8 +44,11 @@ AccountSchema.pre('save', async function (this: IAccount & Document) {
 });
 
 // The custom method
-AccountSchema.methods.comparePassword = async function (this: IAccountDocument, candidate: string): Promise<boolean> {
-  return bcrypt.compare(candidate, this.password || '');
+AccountSchema.methods.comparePassword = async function (
+  this: IAccountDocument,
+  incomingPassword: string
+): Promise<boolean> {
+  return await bcrypt.compare(incomingPassword, this.password || '');
 };
 
 const Account = models?.Account || model<IAccountDocument>('Account', AccountSchema);

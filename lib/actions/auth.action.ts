@@ -5,11 +5,12 @@ import { SignInSchema, SignUpSchema } from '@/lib/validations';
 import handleError from '@/lib/handlers/error';
 import { action } from '@/lib/handlers/action';
 import User from '@/database/user.model';
-import bcrypt from 'bcrypt';
-import Account from '@/database/account.model';
+import Account, { IAccountDocument } from '@/database/account.model';
 import mongoose from 'mongoose';
 import { AuthCredentials } from '@/types/action';
 import dbConnect from '@/lib/mongoose';
+import { NotFoundError, UnauthorizedError } from '@/lib/http-errors';
+import logger from '@/lib/logger';
 
 export async function signUpWithCredentials(params: AuthCredentials): Promise<ActionResponse> {
   const validationResult = await action({ params, schema: SignUpSchema });
@@ -19,7 +20,6 @@ export async function signUpWithCredentials(params: AuthCredentials): Promise<Ac
   }
 
   const { name, username, email, password } = params;
-  console.log({ params });
 
   await dbConnect();
 
@@ -39,7 +39,6 @@ export async function signUpWithCredentials(params: AuthCredentials): Promise<Ac
       return handleError(new Error('Username already exists')) as ActionResponse;
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12);
     const [firstName, lastName = ''] = name.split(' ');
 
     const [newUser] = await User.create(
@@ -63,7 +62,7 @@ export async function signUpWithCredentials(params: AuthCredentials): Promise<Ac
           name,
           provider: 'credentials',
           providerAccountId: email,
-          password: hashedPassword,
+          password,
         },
       ],
       { session }
@@ -73,8 +72,11 @@ export async function signUpWithCredentials(params: AuthCredentials): Promise<Ac
 
     return { success: true };
   } catch (error) {
-    await session.abortTransaction();
-
+    try {
+      await session.abortTransaction();
+    } catch (abort_error) {
+      logger.info('Abort transaction failed:');
+    }
     return handleError(error) as ActionResponse;
   } finally {
     await session.endSession();
@@ -98,22 +100,22 @@ export async function signInWithCredentials(
     const existingUser = await User.findOne({ email });
 
     if (!existingUser) {
-      throw new Error('User does not exist');
+      return handleError(new NotFoundError('User')) as ActionResponse;
     }
 
-    const existingAccount = await Account.findOne({
+    const existingAccount: IAccountDocument | null = await Account.findOne({
       provider: 'credentials',
       providerAccountId: email,
     });
 
     if (!existingAccount) {
-      throw new Error('Account does not exist');
+      return handleError(new NotFoundError('Account')) as ActionResponse;
     }
 
-    const isPasswordCorrect = await bcrypt.compare(password, existingAccount.password);
+    const isPasswordCorrect = await existingAccount.comparePassword(password);
 
     if (!isPasswordCorrect) {
-      throw new Error('Invalid password');
+      return handleError(new UnauthorizedError('Invalid credentials')) as ActionResponse;
     }
 
     return { success: true };
