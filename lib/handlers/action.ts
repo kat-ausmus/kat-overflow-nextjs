@@ -4,7 +4,6 @@ import { ZodError, ZodSchema } from 'zod';
 import { UnauthorizedError, ValidationError } from '../http-errors';
 import { auth } from '@/auth';
 import { Session } from 'next-auth';
-import dbConnect from '@/lib/mongoose';
 
 type ActionOptions<T> = {
   params?: T;
@@ -29,8 +28,6 @@ export async function action<T>({ params, schema, authorize = false }: ActionOpt
     if (!session) {
       return new UnauthorizedError('Action requires authentication');
     }
-
-    await dbConnect();
-    return { params, session };
   }
+  return { params, session };
 }

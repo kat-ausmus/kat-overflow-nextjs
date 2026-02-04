@@ -11,6 +11,7 @@ import { AuthCredentials } from '@/types/action';
 import dbConnect from '@/lib/mongoose';
 import { NotFoundError, UnauthorizedError } from '@/lib/http-errors';
 import logger from '@/lib/logger';
+import { signIn } from '@/auth';
 
 export async function signUpWithCredentials(params: AuthCredentials): Promise<ActionResponse> {
   const validationResult = await action({ params, schema: SignUpSchema });
@@ -88,12 +89,12 @@ export async function signInWithCredentials(
 ): Promise<ActionResponse> {
   const validationResult = await action({ params, schema: SignInSchema });
 
-  if (validationResult instanceof Error) {
+  if (!validationResult || validationResult instanceof Error) {
     return handleError(validationResult) as ActionResponse;
   }
 
   try {
-    const { email, password } = params;
+    const { email, password } = validationResult!.params!;
 
     await dbConnect();
 
@@ -117,7 +118,7 @@ export async function signInWithCredentials(
     if (!isPasswordCorrect) {
       return handleError(new UnauthorizedError('Invalid credentials')) as ActionResponse;
     }
-
+    await signIn('credentials', { email, password, redirect: false });
     return { success: true };
   } catch (error) {
     return handleError(error) as ActionResponse;

@@ -1,23 +1,25 @@
-"use client";
+'use client';
 
-import React from "react";
-import { SheetClose } from "@/components/ui/sheet";
-import { sidebarLinks } from "@/constants/sidebarLinks";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import React from 'react';
 
-const NavLinks = ({ isMobileNav = false }: { isMobileNav?: boolean }) => {
+import { SheetClose } from '@/components/ui/sheet';
+import { sidebarLinks } from '@/constants/sidebarLinks';
+import { cn } from '@/lib/utils';
+
+const NavLinks = ({ isMobileNav = false, userId }: { isMobileNav?: boolean; userId?: string }) => {
   const pathname = usePathname();
-  const userId = 1;
+
+  const firstSixLinks = sidebarLinks.slice(0, 7);
 
   return (
     <>
-      {sidebarLinks.map((item) => {
+      {firstSixLinks.map((item) => {
         const isActive = (pathname.includes(item.route) && item.route.length > 1) || pathname === item.route;
 
-        if (item.route === "/profile") {
+        if (item.route === '/profile') {
           if (userId) item.route = `${item.route}/${userId}`;
           else return null;
         }
@@ -27,8 +29,8 @@ const NavLinks = ({ isMobileNav = false }: { isMobileNav?: boolean }) => {
             href={item.route}
             key={item.label}
             className={cn(
-              isActive ? "primary-gradient text-light-900 rounded-lg" : "text-dark300_light900",
-              "flex items-center justify-start gap-4 bg-transparent p-4"
+              isActive ? 'primary-gradient text-light-900 rounded-lg' : 'text-dark300_light900',
+              'flex items-center justify-start gap-4 bg-transparent p-4'
             )}
           >
             <Image
@@ -36,9 +38,9 @@ const NavLinks = ({ isMobileNav = false }: { isMobileNav?: boolean }) => {
               alt={item.label}
               width={20}
               height={20}
-              className={cn({ "invert-colors": !isActive })}
+              className={cn({ 'invert-colors': !isActive })}
             />
-            <p className={cn(isActive ? "base-bold" : "base-medium", !isMobileNav && "max-lg:hidden")}>{item.label}</p>
+            <p className={cn(isActive ? 'base-bold' : 'base-medium', !isMobileNav && 'max-lg:hidden')}>{item.label}</p>
           </Link>
         );
 

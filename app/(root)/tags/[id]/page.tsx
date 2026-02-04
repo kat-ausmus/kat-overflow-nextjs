@@ -1,6 +1,4 @@
-import React from 'react';
-
 const Tags = () => {
-  return <div>Tags</div>;
+  return <section>Tags</section>;
 };
 export default Tags;

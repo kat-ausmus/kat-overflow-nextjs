@@ -41,18 +41,6 @@ const questions: Question[] = [
   },
 ];
 
-// const errtest = async () => {
-//   const sampleValidationErrorObj = {
-//     title: ['Required'],
-//     tags: ['"JavaScript" is not a valid tag.'],
-//   } as ErrorRecordType;
-//   try {
-//     throw new ValidationError(sampleValidationErrorObj);
-//   } catch (error) {
-//     return handleError(error);
-//   }
-// };
-
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }

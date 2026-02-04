@@ -38,10 +38,10 @@ export const api = {
   accounts: {
     getAll: () => fetchHandler(`${API_BASE_URL}/${ROUTES.ACCOUNTS}`),
     getById: (id: string) => fetchHandler(`${API_BASE_URL}/${ROUTES.ACCOUNT_BY_ID(id)}`),
-    getByProvider: (providerAccountId: string) =>
+    getByProvider: (providerAccountId: string, password?: string) =>
       fetchHandler(`${API_BASE_URL}/${ROUTES.ACCOUNT_BY_PROVIDER}`, {
         method: 'POST',
-        body: JSON.stringify({ providerAccountId }),
+        body: JSON.stringify({ providerAccountId, password }),
       }),
     create: (accountData: Partial<IAccount>) =>
       fetchHandler(`${API_BASE_URL}/${ROUTES.ACCOUNTS}`, {

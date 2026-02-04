@@ -1,12 +1,55 @@
 import NextAuth from 'next-auth';
+import Credentials from 'next-auth/providers/credentials';
 import GitHub from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';
 import { api } from '@/lib/api';
 import { ActionResponse } from '@/types/global';
 import { IAccountDocument } from '@/database/account.model';
+import { SignInSchema } from './lib/validations';
+import { IUserDocument } from '@/database/user.model';
+
+interface IUser {
+  id: string;
+  name: string;
+  email: string;
+  image: string;
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [GitHub, Google],
+  providers: [
+    GitHub,
+    Google,
+    Credentials({
+      async authorize(credentials): Promise<IUser | null> {
+        const validatedFields = SignInSchema.safeParse(credentials);
+
+        if (validatedFields.success) {
+          const { email, password } = validatedFields.data;
+
+          const { data: existingAccount } = (await api.accounts.getByProvider(
+            email,
+            password
+          )) as ActionResponse<IAccountDocument>;
+
+          if (!existingAccount) return null;
+
+          const { data: existingUser } = (await api.users.getById(
+            existingAccount.userId.toString()
+          )) as ActionResponse<IUserDocument>;
+
+          if (!existingUser) return null;
+
+          return {
+            id: existingUser._id.toString(),
+            name: `${existingUser.firstName} ${existingUser.lastName}`,
+            email: existingUser.email,
+            image: existingUser.image,
+          };
+        }
+        return null;
+      },
+    }),
+  ],
   callbacks: {
     async session({ session, token }) {
       session.user.id = token.sub as string;

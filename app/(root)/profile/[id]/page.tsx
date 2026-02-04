@@ -1,6 +1,8 @@
-import React from 'react';
-
 const Profile = () => {
-  return <div>Profile</div>;
+  return (
+    <section>
+      <h1 className="h1-bold text-dark100_light900">User Profile</h1>
+    </section>
+  );
 };
 export default Profile;
