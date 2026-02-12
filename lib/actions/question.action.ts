@@ -11,6 +11,7 @@ import handleError from '../handlers/error';
 import { AskQuestionSchema } from '../validations';
 import { CreateQuestionParams } from '@/types/action';
 import { ActionResponse, ErrorResponse } from '@/types/global';
+import logger from '@/lib/logger';
 
 export async function createQuestion(params: CreateQuestionParams): Promise<ActionResponse<IQuestionDocument>> {
   const validationResult = await action({
@@ -61,7 +62,11 @@ export async function createQuestion(params: CreateQuestionParams): Promise<Acti
 
     return { success: true, data: JSON.parse(JSON.stringify(question)) };
   } catch (error) {
-    await session.abortTransaction();
+    try {
+      await session.abortTransaction();
+    } catch (abort_error) {
+      logger.info('Abort question transaction failed!');
+    }
     return handleError(error) as ErrorResponse<IQuestionDocument>;
   } finally {
     session.endSession();

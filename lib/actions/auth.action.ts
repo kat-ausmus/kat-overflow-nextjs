@@ -76,7 +76,7 @@ export async function signUpWithCredentials(params: AuthCredentials): Promise<Ac
     try {
       await session.abortTransaction();
     } catch (abort_error) {
-      logger.info('Abort transaction failed:');
+      logger.info('Abort auth transaction failed!');
     }
     return handleError(error) as ActionResponse;
   } finally {

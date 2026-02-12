@@ -24,7 +24,7 @@ interface AuthFormProps<T extends FieldValues> {
 const AuthForm = <T extends FieldValues>({ schema, defaultValues, formType, onSubmit }: AuthFormProps<T>) => {
   const router = useRouter();
 
-  console.log('Loading Authform ...');
+  console.log('Loading Auth form ...');
 
   const form = useForm<T>({
     resolver: zodResolver(schema as any),

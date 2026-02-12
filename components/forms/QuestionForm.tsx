@@ -1,7 +1,8 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useRef } from 'react';
+import React, { useRef, useTransition } from 'react';
+import { ReloadIcon } from '@radix-ui/react-icons';
 import { useForm } from 'react-hook-form';
 
 import { AskQuestionSchema } from '@/lib/validations/question.schema';
@@ -14,6 +15,10 @@ import { MDXEditorMethods } from '@mdxeditor/editor';
 import dynamic from 'next/dynamic';
 import { z } from 'zod';
 import TagCard from '@/components/cards/TagCard';
+import { createQuestion } from '@/lib/actions/question.action';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import ROUTES from '@/constants/routes';
 
 // forces Editor to be on the client side only
 const Editor = dynamic(() => import('@/components/editor'), {
@@ -21,7 +26,9 @@ const Editor = dynamic(() => import('@/components/editor'), {
 });
 
 const QuestionForm = () => {
+  const router = useRouter();
   const editorRef = useRef<MDXEditorMethods>(null);
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
@@ -31,6 +38,22 @@ const QuestionForm = () => {
       tags: [],
     },
   });
+
+  const handleCreateQuestion = async (data: z.infer<typeof AskQuestionSchema>) => {
+    startTransition(async () => {
+      const result = await createQuestion(data);
+      if (result.success) {
+        toast('Success', {
+          description: 'Your question has been created successfully',
+        });
+        if (result.data) router.push(ROUTES.QUESTION(result.data._id));
+      } else {
+        toast(`Error ${result.status}`, {
+          description: result.error?.message || 'Something went wrong',
+        });
+      }
+    });
+  };
 
   const handleTagRemove = (tag: string, field: { value: string[] }) => {
     const newTags = field.value.filter((t) => t !== tag);
@@ -66,8 +89,6 @@ const QuestionForm = () => {
     }
   };
 
-  const handleCreateQuestion = () => {};
-
   return (
     <Form {...form}>
       <form className="flex w-full flex-col gap-10" onSubmit={form.handleSubmit(handleCreateQuestion)}>
@@ -80,7 +101,10 @@ const QuestionForm = () => {
                 Question Title <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-14 border" />
+                <Input
+                  className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-14 border"
+                  {...field}
+                />
               </FormControl>
               <FormDescription className="body-regular text-light-500 mt-2.5">
                 Be specific and imagine you&apos;re asking a question to another person.
@@ -148,8 +172,15 @@ const QuestionForm = () => {
         />
 
         <div className="mt-16 flex justify-end">
-          <Button type="submit" className="primary-gradient text-light-900! w-fit">
-            Ask A Question
+          <Button type="submit" disabled={isPending} className="primary-gradient text-light-900! w-fit">
+            {isPending ? (
+              <>
+                <ReloadIcon className="mr-2 size-4 animate-spin" />
+                <span>Submitting</span>
+              </>
+            ) : (
+              <>Ask A Question</>
+            )}
           </Button>
         </div>
       </form>
