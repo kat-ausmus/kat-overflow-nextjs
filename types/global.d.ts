@@ -40,3 +40,12 @@ export type ErrorResponse<T> = ActionResponse<T> & { success: false };
 
 export type APIErrorResponse = NextResponse<ErrorResponse<any>>;
 export type APIResponse<T = null> = NextResponse<SuccessResponse<T> | ErrorResponse<T>>;
+
+type RouteParamsType = Record<string, string> & {
+  id?: string;
+};
+
+interface RouteParams {
+  params: Promise<RouteParamsType>;
+  searchParams: Promise<RouteParamsType>;
+}
