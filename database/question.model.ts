@@ -9,6 +9,8 @@ export interface IQuestion {
   downvotes: number;
   answers: number;
   author: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IQuestionDocument extends IQuestion, Document {}

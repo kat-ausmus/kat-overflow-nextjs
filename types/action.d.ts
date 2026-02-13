@@ -16,8 +16,16 @@ export interface AuthCredentials {
   password: string;
 }
 
-interface CreateQuestionParams {
+export interface CreateQuestionParams {
   title: string;
   content: string;
   tags: string[];
+}
+
+export interface EditQuestionParams extends CreateQuestionParams {
+  questionId: string;
+}
+
+export interface GetQuestionParams {
+  questionId: string;
 }

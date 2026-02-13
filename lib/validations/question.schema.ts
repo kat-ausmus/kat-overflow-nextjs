@@ -13,3 +13,11 @@ export const AskQuestionSchema = z.object({
     .max(3, { message: 'Cannot add more than 3 tags.' }),
 });
 export type AskQuestionSchemaType = z.infer<typeof AskQuestionSchema>;
+
+export const EditQuestionSchema = AskQuestionSchema.extend({
+  questionId: z.string().min(1, { message: 'Question ID is required.' }),
+});
+
+export const GetQuestionSchema = z.object({
+  questionId: z.string().min(1, { message: 'Question ID' }),
+});

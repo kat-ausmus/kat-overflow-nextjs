@@ -1,12 +1,10 @@
-import { Types } from 'mongoose';
-
 const ROUTES = {
   HOME: '/',
   SIGN_IN: '/sign-in',
   SIGN_UP: '/sign-up',
   ASK_QUESTION: '/ask-a-question',
   PROFILE: (id: string) => `/profile/${id}`,
-  QUESTION: (id: Types.ObjectId) => `/questions/${id}`,
+  QUESTION: (id: string) => `/questions/${id}`,
   TAGS: (id: string) => `/tags/${id}`,
   SIGN_IN_WITH_OAUTH: `signin-with-oauth`,
   USERS: 'users',
