@@ -1,16 +1,17 @@
 'use server';
 
-import mongoose from 'mongoose';
+import mongoose, { QueryFilter } from 'mongoose';
 
-import Question, { IQuestionDocument } from '@/database/question.model';
+import { ActionResponse, ErrorResponse, PaginatedSearchParams, Question as QuestionType } from '@/types/global';
+import QuestionCollection, { IQuestionDocument } from '@/database/question.model';
 import TagQuestion from '@/database/tag-question.model';
 import Tag, { ITagDocument } from '@/database/tag.model';
 
 import { action } from '../handlers/action';
 import handleError from '../handlers/error';
-import { AskQuestionSchema, EditQuestionSchema, GetQuestionSchema } from '../validations';
+import { AskQuestionSchema, EditQuestionSchema, GetQuestionSchema, PaginatedSearchParamsSchema } from '../validations';
 import { CreateQuestionParams, EditQuestionParams, GetQuestionParams } from '@/types/action';
-import { ActionResponse, ErrorResponse } from '@/types/global';
+import dbConnect from '@/lib/mongoose';
 
 export async function createQuestion(params: CreateQuestionParams): Promise<ActionResponse<IQuestionDocument>> {
   const validationResult = await action({
@@ -26,11 +27,12 @@ export async function createQuestion(params: CreateQuestionParams): Promise<Acti
   const { title, content, tags } = validationResult.params!;
   const userId = validationResult?.session?.user?.id;
 
+  await dbConnect();
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    const [question] = await Question.create([{ title, content, author: userId }], { session });
+    const [question] = await QuestionCollection.create([{ title, content, author: userId }], { session });
 
     if (!question) {
       return handleError(new Error('Failed to create question')) as ErrorResponse<IQuestionDocument>;
@@ -43,7 +45,7 @@ export async function createQuestion(params: CreateQuestionParams): Promise<Acti
       const existingTag = await Tag.findOneAndUpdate(
         { name: { $regex: new RegExp(`^${tag}$`, 'i') } },
         { $setOnInsert: { name: tag }, $inc: { questions: 1 } },
-        { upsert: true, new: true, session }
+        { upsert: true, returnDocument: 'after', session }
       );
 
       tagIds.push(existingTag._id);
@@ -55,7 +57,7 @@ export async function createQuestion(params: CreateQuestionParams): Promise<Acti
 
     await TagQuestion.insertMany(tagQuestionDocuments, { session });
 
-    await Question.findByIdAndUpdate(question._id, { $push: { tags: { $each: tagIds } } }, { session });
+    await QuestionCollection.findByIdAndUpdate(question._id, { $push: { tags: { $each: tagIds } } }, { session });
 
     await session.commitTransaction();
 
@@ -82,11 +84,12 @@ export async function editQuestion(params: EditQuestionParams): Promise<ActionRe
   const { title, content, tags, questionId } = validationResult.params!;
   const userId = validationResult?.session?.user?.id;
 
+  await dbConnect();
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    const [question] = await Question.findById(questionId).populate('tags');
+    const [question] = await QuestionCollection.findById(questionId).populate('tags');
 
     if (!question) {
       return handleError(new Error('Failed to find question')) as ErrorResponse<IQuestionDocument>;
@@ -108,7 +111,7 @@ export async function editQuestion(params: EditQuestionParams): Promise<ActionRe
         const existingTag = await Tag.findOneAndUpdate(
           { name: { $regex: new RegExp(`^${tag}$`, 'i') } },
           { $setOnInsert: { name: tag }, $inc: { questions: 1 } },
-          { upsert: true, new: true, session }
+          { upsert: true, returnDocument: 'after', session }
         );
         if (existingTag) {
           newTagDocuments.push({
@@ -160,8 +163,10 @@ export async function getQuestion(params: GetQuestionParams): Promise<ActionResp
 
   const { questionId } = validationResult.params!;
 
+  await dbConnect();
+
   try {
-    const question = await Question.findById(questionId).populate('tags');
+    const question = await QuestionCollection.findById(questionId).populate('tags');
 
     if (!question) {
       return handleError(new Error('Question not found')) as ErrorResponse<IQuestionDocument>;
@@ -170,5 +175,73 @@ export async function getQuestion(params: GetQuestionParams): Promise<ActionResp
     return { success: true, data: JSON.parse(JSON.stringify(question)) };
   } catch (error) {
     return handleError(error) as ErrorResponse<IQuestionDocument>;
+  }
+}
+
+interface IQuestions {
+  questions: QuestionType[];
+  isNext: boolean;
+}
+export async function getQuestions(params: PaginatedSearchParams): Promise<ActionResponse<IQuestions>> {
+  const validationResult = await action({
+    params,
+    schema: PaginatedSearchParamsSchema,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse<IQuestions>;
+  }
+
+  const { page = 1, pageSize = 10, query, filter } = params;
+  const skip = (Number(page) - 1) * pageSize;
+  const limit = Number(pageSize);
+
+  const filterQuery: QueryFilter<IQuestions> = {};
+
+  if (filter === 'recommended') {
+    return { success: true, data: { questions: [], isNext: false } };
+  }
+
+  if (query) {
+    filterQuery.$or = [{ title: { $regex: new RegExp(query, 'i') } }, { content: { $regex: new RegExp(query, 'i') } }];
+  }
+
+  let sortCriteria;
+
+  switch (filter) {
+    case 'newest':
+      sortCriteria = { createdAt: -1 };
+      break;
+    case 'unanswered':
+      filterQuery.answers = 0;
+      sortCriteria = { createdAt: -1 };
+      break;
+    case 'popular':
+      sortCriteria = { upvotes: -1 };
+      break;
+    default:
+      sortCriteria = { createdAt: -1 };
+      break;
+  }
+
+  try {
+    const totalQuestions = await QuestionCollection.countDocuments(filterQuery);
+
+    const questions = await QuestionCollection.find(filterQuery)
+      .populate('tags', 'name')
+      .populate('author', 'name image')
+      .lean()
+      .sort(sortCriteria)
+      .skip(skip)
+      .limit(limit);
+
+    const isNext = totalQuestions > skip + questions.length;
+
+    return {
+      success: true,
+      data: { questions: JSON.parse(JSON.stringify(questions)), isNext },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse<IQuestions>;
   }
 }

@@ -49,3 +49,11 @@ interface RouteParams {
   params: Promise<RouteParamsType>;
   searchParams: Promise<RouteParamsType>;
 }
+
+interface PaginatedSearchParams {
+  page?: number;
+  pageSize?: number;
+  query?: string;
+  filter?: string;
+  sort?: string;
+}

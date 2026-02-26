@@ -45,27 +45,29 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
     },
   });
 
+  const handleEditQuestion = async (question: Question, data: z.infer<typeof AskQuestionSchema>) => {
+    const result = await editQuestion({
+      questionId: question?._id,
+      ...data,
+    });
+
+    if (result.success) {
+      toast('Success', {
+        description: 'Question updated successfully',
+      });
+
+      if (result.data) router.push(ROUTES.QUESTION(result.data._id.toString()));
+    } else {
+      toast(`Error ${result.status}`, {
+        description: result.error?.message || 'Something went wrong',
+      });
+    }
+  };
+
   const handleCreateQuestion = async (data: z.infer<typeof AskQuestionSchema>) => {
     startTransition(async () => {
       if (isEdit && question) {
-        const result = await editQuestion({
-          questionId: question?._id,
-          ...data,
-        });
-
-        if (result.success) {
-          toast('Success', {
-            description: 'Question updated successfully',
-          });
-
-          if (result.data) router.push(ROUTES.QUESTION(result.data._id.toString()));
-        } else {
-          toast(`Error ${result.status}`, {
-            description: result.error?.message || 'Something went wrong',
-          });
-        }
-
-        return;
+        return handleEditQuestion(question, data);
       }
       const result = await createQuestion(data);
       if (result.success) {
@@ -205,7 +207,7 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
                 <span>Submitting</span>
               </>
             ) : (
-              <>Ask A Question</>
+              <>{isEdit ? ' Edit' : ' Ask'} A Question</>
             )}
           </Button>
         </div>
