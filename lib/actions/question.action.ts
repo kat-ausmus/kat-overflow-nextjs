@@ -102,9 +102,13 @@ export async function editQuestion(params: EditQuestionParams): Promise<ActionRe
     question.title = title;
     question.content = content;
 
-    const tagsToAdd = tags.filter((tag) => !question.tags.includes(tag.toLowerCase()));
-    const tagsToRemove = question.tags.filter((tag: ITagDocument) => !tags.includes(tag.name.toLowerCase()));
+    const tagsToAdd = tags.filter(
+      (tag) => !question.tags.some((t: ITagDocument) => t.name.toLowerCase().includes(tag.toLowerCase()))
+    );
 
+    const tagsToRemove = question.tags.filter(
+      (tag: ITagDocument) => !tags.some((t) => t.toLowerCase() === tag.name.toLowerCase())
+    );
     const newTagDocuments = [];
     if (tagsToAdd.length > 0) {
       for (const tag of tagsToAdd) {
@@ -131,7 +135,9 @@ export async function editQuestion(params: EditQuestionParams): Promise<ActionRe
 
       await TagQuestion.deleteMany({ tag: { $in: tagIdsToRemove }, question: questionId }, { session });
 
-      question.tags = question.tags.filter((tagId: mongoose.Types.ObjectId) => !tagsToRemove.includes(tagId));
+      question.tags = question.tags.filter(
+        (tagId: mongoose.Types.ObjectId) => !tagIdsToRemove.some((id: mongoose.Types.ObjectId) => id.equals(tagId))
+      );
     }
 
     if (newTagDocuments.length > 0) {
@@ -206,7 +212,7 @@ export async function getQuestions(params: PaginatedSearchParams): Promise<Actio
     filterQuery.$or = [{ title: { $regex: new RegExp(query, 'i') } }, { content: { $regex: new RegExp(query, 'i') } }];
   }
 
-  let sortCriteria;
+  let sortCriteria = {};
 
   switch (filter) {
     case 'newest':
@@ -226,6 +232,7 @@ export async function getQuestions(params: PaginatedSearchParams): Promise<Actio
 
   try {
     const totalQuestions = await QuestionCollection.countDocuments(filterQuery);
+    console.log('totalQuestions', totalQuestions);
 
     const questions = await QuestionCollection.find(filterQuery)
       .populate('tags', 'name')

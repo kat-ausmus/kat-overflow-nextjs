@@ -12,7 +12,7 @@ interface SearchParams {
 }
 
 const Home = async ({ searchParams }: SearchParams) => {
-  const { page, pageSize, query, filter } = await searchParams;
+  const { page, pageSize, query = '', filter = '' } = await searchParams;
 
   const { success, data, error } = await getQuestions({
     page: Number(page) || 1,
@@ -23,11 +23,11 @@ const Home = async ({ searchParams }: SearchParams) => {
 
   const { questions } = data || {};
 
-  const filteredQuestions = questions?.filter((question) => {
-    const matchesQuery = question.title.toLowerCase().includes(query.toLowerCase());
-    const matchesFilter = filter ? question.tags[0].name.toLowerCase() === filter.toLowerCase() : true;
-    return matchesQuery && matchesFilter;
-  });
+  // const filteredQuestions = questions?.filter((question) => {
+  //   const matchesQuery = question.title.toLowerCase().includes(query.toLowerCase());
+  //   const matchesFilter = filter ? question.tags[0].name.toLowerCase() === filter.toLowerCase() : true;
+  //   return matchesQuery && matchesFilter;
+  // });
 
   return (
     <>
@@ -48,9 +48,21 @@ const Home = async ({ searchParams }: SearchParams) => {
         />
       </section>
       <HomeFilter />
-      <div className="mt-10 flex w-full flex-col gap-6">
-        {filteredQuestions?.map((question) => <QuestionCard key={question._id} question={question} />) || <></>}
-      </div>
+      {success ? (
+        <div className="mt-10 flex w-full flex-col gap-6">
+          {questions && questions.length > 0 ? (
+            questions.map((question) => <QuestionCard key={question._id} question={question} />)
+          ) : (
+            <div className="mt-10 flex w-full items-center justify-center">
+              <p className="text-dark400_light700">No questions found</p>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="mt-10 flex w-full items-center justify-center">
+          <p className="text-dark400_light700">Unsuccessful to Fetcvh Questions</p>
+        </div>
+      )}
     </>
   );
 };
