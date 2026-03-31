@@ -60,7 +60,7 @@ const Home = async ({ searchParams }: SearchParams) => {
         </div>
       ) : (
         <div className="mt-10 flex w-full items-center justify-center">
-          <p className="text-dark400_light700">Unsuccessful to Fetcvh Questions</p>
+          <p className="text-dark400_light700">Unsuccessful Fetching Questions</p>
         </div>
       )}
     </>

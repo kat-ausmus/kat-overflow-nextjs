@@ -39,6 +39,7 @@ const NavLinks = ({ isMobileNav = false, userId }: { isMobileNav?: boolean; user
               width={20}
               height={20}
               className={cn({ 'invert-colors': !isActive })}
+              style={{ width: 'auto', height: 'auto' }}
             />
             <p className={cn(isActive ? 'base-bold' : 'base-medium', !isMobileNav && 'max-lg:hidden')}>{item.label}</p>
           </Link>
