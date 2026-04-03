@@ -4,7 +4,7 @@ const ROUTES = {
   SIGN_UP: '/sign-up',
   ASK_QUESTION: '/ask-a-question',
   PROFILE: (id: string) => `/profile/${id}`,
-  QUESTION: (id: string) => `/questions/${id}`,
+  QUESTION: (id: string) => `/questions/${id}/edit`,
   TAGS: (id: string) => `/tags/${id}`,
   SIGN_IN_WITH_OAUTH: `signin-with-oauth`,
   USERS: 'users',
@@ -13,6 +13,8 @@ const ROUTES = {
   ACCOUNTS: 'accounts',
   ACCOUNT_BY_ID: (id: string) => `accounts/${id}`,
   ACCOUNT_BY_PROVIDER: `accounts/provider`,
+  COLLECTIONS: 'collections',
+  COLLECTION_BY_ID: (id: string) => `collections/${id}`,
 };
 
 export default ROUTES;

@@ -77,6 +77,8 @@ export async function editQuestion(params: EditQuestionParams): Promise<ActionRe
     authorize: true,
   });
 
+  console.log('question.action.ts edit questions', { params, validationResult });
+
   if (validationResult instanceof Error) {
     return handleError(validationResult) as ErrorResponse<IQuestionDocument>;
   }
@@ -194,6 +196,7 @@ export async function getQuestions(params: PaginatedSearchParams): Promise<Actio
     schema: PaginatedSearchParamsSchema,
   });
 
+  await dbConnect();
   if (validationResult instanceof Error) {
     return handleError(validationResult) as ErrorResponse<IQuestions>;
   }
@@ -212,7 +215,7 @@ export async function getQuestions(params: PaginatedSearchParams): Promise<Actio
     filterQuery.$or = [{ title: { $regex: new RegExp(query, 'i') } }, { content: { $regex: new RegExp(query, 'i') } }];
   }
 
-  let sortCriteria = {};
+  let sortCriteria;
 
   switch (filter) {
     case 'newest':
